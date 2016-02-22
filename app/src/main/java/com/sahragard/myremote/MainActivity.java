@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         /*
 
-
-        //START DISCOVERY MUST BE TRIGGERED AFTER BLUETOOTH HAVE STARTED
+        REMINDER
+        START DISCOVERY MUST BE TRIGGERED AFTER BLUETOOTH HAVE STARTED
 
          */
 
