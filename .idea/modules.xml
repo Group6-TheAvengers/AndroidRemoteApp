@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyRemote.iml" filepath="$PROJECT_DIR$/MyRemote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AndroidRemoteApp.iml" filepath="$PROJECT_DIR$/.idea/AndroidRemoteApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

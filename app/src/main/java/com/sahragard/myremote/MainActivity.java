@@ -32,25 +32,15 @@ public class MainActivity extends AppCompatActivity {
     public Button disconnectButton;
     public Button connectDevice;
     public Spinner conSpinner;
-    List<BluetoothDevice> allDevices = new ArrayList<BluetoothDevice>();
-    List<String> allDeviceNames = new ArrayList<String>();
     ArrayAdapter<String> adapter;
     String selectedDeviceName = "";
-    BluetoothDevice connectToDevice;
-    BluetoothSocket btSocket;
-    PrintWriter output;
-    Scanner input;
-    UUID uuid;
-    Thread workerThread;
-    Thread inputThread;
-    public BluetoothDevice device;
-    private Intent enableBluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Bluetooth bt = new Bluetooth(MainActivity.this, btAdapter);
 
         /*
 
@@ -58,26 +48,6 @@ public class MainActivity extends AppCompatActivity {
         //START DISCOVERY MUST BE TRIGGERED AFTER BLUETOOTH HAVE STARTED
 
          */
-
-        final Handler handler = new Handler();
-        workerThread = new Thread(new Runnable() {
-            public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
-                    //Do work
-                }
-            }
-        });
-        final Handler handler1 = new Handler();
-
-        inputThread = new Thread(new Runnable() {
-            public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
-                    while (input.hasNextLine())
-                        Toast.makeText(MainActivity.this, input.nextLine(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
 
         //Displays bluetooth status in the top
         statusUpdate = (TextView) findViewById(R.id.statusUpdate);
@@ -98,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //Adapter that hold device strings
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, allDeviceNames);
+
 
 
         //Start bluetooth and find devices
@@ -109,12 +77,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!btAdapter.isEnabled()) {
 
-                    enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableBluetooth, 0);
 
                     btAdapter.startDiscovery();
 
-                    findDevices();
+                    bt.findDevices();
                     statusUpdate.setText("Bluetooth on");
                 }
             }
@@ -122,8 +90,12 @@ public class MainActivity extends AppCompatActivity {
         Button searchButton = (Button) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                adapter.clear();
-                btAdapter.startDiscovery();
+                //adapter.clear();
+                //Adapter that hold device strings
+                adapter = new ArrayAdapter<String>(MainActivity.this,
+                        android.R.layout.simple_spinner_item, bt.getFoundDeviceNames());
+
+                conSpinner.setAdapter(adapter);
             }
         });
 
@@ -144,26 +116,9 @@ public class MainActivity extends AppCompatActivity {
         connectDevice = (Button) findViewById(R.id.connectDevice);
         connectDevice.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                for (BluetoothDevice device : allDevices) {
-                    if (device != null) {
-                        if (device.getName().equals(selectedDeviceName)) {
-                            Toast.makeText(MainActivity.this, selectedDeviceName, Toast.LENGTH_SHORT).show();
-                            connectToDevice = device;
-
-                            try {
-                                uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-                                btSocket = connectToDevice.createRfcommSocketToServiceRecord(uuid);
-                                btSocket.connect();
-                                output = new PrintWriter(btSocket.getOutputStream());
-                                workerThread.start();
-                                input = new Scanner(btSocket.getInputStream());
-                                inputThread.start();
-                                statusUpdate.setText("Connected to " + connectToDevice.getName());
-
-                            } catch (IOException e) {
-
-                            }
-                        }
+                for (BluetoothDevice device : bt.getFoundDevices()) {
+                    if (device != null && device.getName().equals(selectedDeviceName)) {
+                        bt.connect(device);
                     }
                 }
             }
@@ -175,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             ;
             btAdapter.startDiscovery();
             statusUpdate.setText("Bluetooth on");
-            findDevices();
+            bt.findDevices();
 
         } else {
             statusUpdate.setText("Bluetooth off");
@@ -185,99 +140,45 @@ public class MainActivity extends AppCompatActivity {
         final Button up = (Button) findViewById(R.id.upButton);
         up.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                send("w");
+                bt.send("w");
             }
         });
 
         final Button down = (Button) findViewById(R.id.downButton);
         down.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                send("s");
+                bt.send("s");
             }
         });
 
         final Button brake = (Button) findViewById(R.id.brake);
         brake.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                send("f");
+                bt.send("f");
             }
         });
 
         final Button drift = (Button) findViewById(R.id.drift);
         drift.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                send("e");
+                bt.send("e");
             }
         });
 
         final Button left = (Button) findViewById(R.id.leftButton);
         left.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                send("a");
+                bt.send("a");
             }
         });
 
         final Button right = (Button) findViewById(R.id.rightButton);
         right.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                send("d");
+                bt.send("d");
             }
         });
 
 
-    }
-
-    private void findDevices() {
-        allDeviceNames.clear();
-        allDevices.clear();
-
-        IntentFilter filter = new IntentFilter();
-
-        filter.addAction(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-
-        registerReceiver(mReceiver, filter);
-    }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                //discovery starts, we can show progress dialog or perform other tasks
-                Toast.makeText(MainActivity.this, "Discovery started", Toast.LENGTH_SHORT).show();
-
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                //discovery finishes, dismis progress dialog
-                Toast.makeText(MainActivity.this, "Discovery finished", Toast.LENGTH_SHORT).show();
-                conSpinner.setAdapter(adapter);
-
-            } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                //bluetooth device found
-                device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (device != null) {
-                    allDevices.add(0, device);
-                    if (device != null) {
-                        if (device.getName().length() > 0) {
-                            if (device.getName().equals("Avengers")) {
-                                allDeviceNames.add(0, device.getName());
-                                btAdapter.cancelDiscovery();
-                            } else {
-                                allDeviceNames.add(device.getName());
-                            }
-                        }
-                    }
-                }
-
-                Toast.makeText(MainActivity.this, "Found device: " + device.getName(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    public void send(String msg) {
-        output.println(msg);
-        output.flush();
     }
 }
