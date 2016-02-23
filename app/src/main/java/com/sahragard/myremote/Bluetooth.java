@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -67,8 +68,9 @@ public class Bluetooth {
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
-                    while (input.hasNextLine())
-                        Toast.makeText(context, input.nextLine(), Toast.LENGTH_SHORT).show();
+                    while (input.hasNextLine()) {
+
+                    }
                 }
             }
         });
@@ -129,7 +131,6 @@ public class Bluetooth {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 //IF TOSTRING ERROR ARISES CHECK THIS
                 selectedDeviceName = spinner.getSelectedItem().toString();
-                Toast.makeText(context, selectedDeviceName, Toast.LENGTH_SHORT).show();
             }
 
             public void onNothingSelected(AdapterView parent) {
@@ -196,6 +197,7 @@ public class Bluetooth {
                     //discovery finishes, dismis progress dialog
                     Toast.makeText(context, "Discovery finished", Toast.LENGTH_SHORT).show();
                     getDeviceSpinner();
+                    context.unregisterReceiver(mReceiver);
 
 
                     //When a bluetooth device is found
