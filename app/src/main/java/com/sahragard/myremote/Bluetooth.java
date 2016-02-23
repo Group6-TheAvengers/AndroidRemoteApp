@@ -67,10 +67,8 @@ public class Bluetooth {
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
-                    while (input.hasNextLine()) {
-                        res = input.nextLine();
-
-                    }
+                    while (input.hasNextLine())
+                        Toast.makeText(context, input.nextLine(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -131,6 +129,7 @@ public class Bluetooth {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 //IF TOSTRING ERROR ARISES CHECK THIS
                 selectedDeviceName = spinner.getSelectedItem().toString();
+                Toast.makeText(context, selectedDeviceName, Toast.LENGTH_SHORT).show();
             }
 
             public void onNothingSelected(AdapterView parent) {

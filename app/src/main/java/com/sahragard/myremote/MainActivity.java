@@ -4,8 +4,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     public Button enableBT;
     public Button disableBT;
     public Button connectDevice;
+
+    RelativeLayout layout_joystick;
+    JoyStickClass js;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,47 +94,44 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        final Button up = (Button) findViewById(R.id.upButton);
-        up.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                bt.send("w");
+        layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
+
+        js = new JoyStickClass(getApplicationContext()
+                ,layout_joystick , R.drawable.image_button);
+        js.setStickSize(150, 150);
+        js.setLayoutSize(500, 500);
+        js.setLayoutAlpha(150);
+        js.setStickAlpha(100);
+        js.setOffset(90);
+        js.setMinimumDistance(50);
+        js.drawStick();
+
+
+        layout_joystick.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent arg1) {
+                js.move(arg1);
+                if (arg1.getAction() == MotionEvent.ACTION_DOWN
+                        || arg1.getAction() == MotionEvent.ACTION_MOVE) {
+
+                    int direction = js.get4Direction();
+                    if (direction == JoyStickClass.STICK_UP) {
+                        bt.send("w");
+                    } else if (direction == JoyStickClass.STICK_RIGHT) {
+                        bt.send("d");
+                    } else if (direction == JoyStickClass.STICK_DOWN) {
+                        bt.send("s");
+                    } else if (direction == JoyStickClass.STICK_LEFT) {
+                        bt.send("a");
+                    } else if (direction == JoyStickClass.STICK_NONE) {
+                        bt.send("f");
+                    }
+                } else if(arg1.getAction() == MotionEvent.ACTION_UP) {
+                    bt.send("f");
+                }
+                return true;
             }
         });
 
-        final Button down = (Button) findViewById(R.id.downButton);
-        down.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                bt.send("s");
-            }
-        });
-
-        final Button brake = (Button) findViewById(R.id.brake);
-        brake.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                bt.send("f");
-            }
-        });
-
-        final Button drift = (Button) findViewById(R.id.drift);
-        drift.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                bt.send("e");
-            }
-        });
-
-        final Button left = (Button) findViewById(R.id.leftButton);
-        left.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                bt.send("a");
-            }
-        });
-
-        final Button right = (Button) findViewById(R.id.rightButton);
-        right.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                bt.send("d");
-            }
-        });
 
 
     }
