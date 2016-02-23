@@ -39,6 +39,7 @@ public class Bluetooth {
     private BluetoothSocket btSocket;
     public Spinner spinner;
     public String selectedDeviceName = "";
+    private String res = "";
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
@@ -66,8 +67,10 @@ public class Bluetooth {
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
-                    while (input.hasNextLine())
-                        Toast.makeText(context, input.nextLine(), Toast.LENGTH_SHORT).show();
+                    while (input.hasNextLine()) {
+                        res = input.nextLine();
+
+                    }
                 }
             }
         });
@@ -128,7 +131,6 @@ public class Bluetooth {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 //IF TOSTRING ERROR ARISES CHECK THIS
                 selectedDeviceName = spinner.getSelectedItem().toString();
-                Toast.makeText(context, selectedDeviceName, Toast.LENGTH_SHORT).show();
             }
 
             public void onNothingSelected(AdapterView parent) {
@@ -163,7 +165,7 @@ public class Bluetooth {
                 Toast.makeText(context, "Connected to " + device.getName(), Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {
-                Toast.makeText(context, "Connection failed", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
@@ -174,7 +176,7 @@ public class Bluetooth {
             output.println(msg);
             output.flush();
         } catch (Exception e) {
-            Toast.makeText(context, "Failed to send", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -215,8 +217,6 @@ public class Bluetooth {
                             }
                         }
                     }
-                    //Shows a toast of a found device
-                    Toast.makeText(context, "Found device: " + device.getName(), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
             }
