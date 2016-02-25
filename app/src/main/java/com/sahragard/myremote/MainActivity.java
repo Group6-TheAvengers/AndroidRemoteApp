@@ -106,5 +106,6 @@ public class MainActivity extends AppCompatActivity {
         js.drawStick();
 
 
+
     }
 }
