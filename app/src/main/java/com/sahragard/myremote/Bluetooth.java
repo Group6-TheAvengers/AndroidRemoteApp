@@ -15,7 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +36,14 @@ public class Bluetooth {
     private List<String> bluetoothDeviceNames = new ArrayList<String>();
     private Thread workerThread;
     private Thread inputThread;
-    private Scanner input;
+    private BufferedReader input;
     private PrintWriter output;
     private Activity activity;
     private BluetoothSocket btSocket;
     public Spinner spinner;
     public String selectedDeviceName = "";
     private String res = "";
+    private int speed = 0;
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
@@ -68,7 +71,14 @@ public class Bluetooth {
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
-                    while (input.hasNextLine()) {
+                    while (input!=null) {
+                        try {
+                            String tmp = input.readLine();
+                            speed = Integer.parseInt(tmp);
+                            System.out.println(speed); // Print speed
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 }
@@ -160,7 +170,7 @@ public class Bluetooth {
                 btSocket.connect();
                 output = new PrintWriter(btSocket.getOutputStream());
                 workerThread.start();
-                input = new Scanner(btSocket.getInputStream());
+                input = new BufferedReader(new InputStreamReader(btSocket.getInputStream()));
                 inputThread.start();
                 Toast.makeText(context, "Connected to " + device.getName(), Toast.LENGTH_SHORT).show();
 
