@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     public Button enableBT;
     public Button disableBT;
     public Button connectDevice;
-    public boolean doOnce = true;
 
     RelativeLayout layout_joystick;
     JoyStickClass js;
