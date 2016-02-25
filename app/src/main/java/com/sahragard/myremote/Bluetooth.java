@@ -84,7 +84,7 @@ public class Bluetooth {
                                 @Override
                                 public void run() {
                                     // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                                    currentSpeed.setText(speedString);
+                                    currentSpeed.setText(speedString + " km/h");
                                 }
                             });
                         } catch (IOException e) {

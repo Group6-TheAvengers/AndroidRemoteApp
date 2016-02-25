@@ -89,11 +89,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="0 km/h"
+        android:textSize="50dp"
         android:id="@+id/currentSpeed"
         android:layout_below="@+id/gridLayout"
-        android:layout_alignRight="@+id/gridLayout"
-        android:layout_alignEnd="@+id/gridLayout" />
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
