@@ -8,9 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         final Bluetooth bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
 
@@ -94,11 +94,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
 
         js = new JoyStickClass(getApplicationContext()
-                ,layout_joystick , R.drawable.image_button);
+                ,layout_joystick , R.drawable.image_button, bt);
         js.setStickSize(150, 150);
         js.setLayoutSize(500, 500);
         js.setLayoutAlpha(150);
@@ -106,33 +105,6 @@ public class MainActivity extends AppCompatActivity {
         js.setOffset(90);
         js.setMinimumDistance(50);
         js.drawStick();
-
-
-        layout_joystick.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent arg1) {
-                js.move(arg1);
-                if (arg1.getAction() == MotionEvent.ACTION_DOWN
-                        || arg1.getAction() == MotionEvent.ACTION_MOVE) {
-
-                    int direction = js.get4Direction();
-                    if (direction == JoyStickClass.STICK_UP) {
-                        bt.send("w");
-                    } else if (direction == JoyStickClass.STICK_RIGHT) {
-                        bt.send("d");
-                    } else if (direction == JoyStickClass.STICK_DOWN) {
-                        bt.send("s");
-                    } else if (direction == JoyStickClass.STICK_LEFT) {
-                        bt.send("a");
-                    } else if (direction == JoyStickClass.STICK_NONE) {
-                        bt.send("f");
-                    }
-                } else if(arg1.getAction() == MotionEvent.ACTION_UP) {
-                    bt.send("f");
-                }
-                return true;
-            }
-        });
-
 
 
     }

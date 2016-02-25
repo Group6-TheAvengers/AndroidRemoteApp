@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
@@ -40,7 +41,8 @@ public class JoyStickClass {
 
     private boolean touch_state = false;
 
-    public JoyStickClass (Context context, ViewGroup layout, int stick_res_id) {
+    public JoyStickClass (Context context, ViewGroup layout, int stick_res_id, final Bluetooth bt) {
+
         mContext = context;
 
         stick = BitmapFactory.decodeResource(mContext.getResources(),
@@ -53,13 +55,20 @@ public class JoyStickClass {
         paint = new Paint();
         mLayout = layout;
         params = mLayout.getLayoutParams();
+
+        layout.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent arg1) {
+                move(arg1, bt);
+                return true;
+            }
+        });
     }
     public void drawStick(){
-        draw.position(mLayout.getLayoutParams().width / 2, params.height / 2);
+        draw.position(params.width / 2, params.height / 2);
         draw();
     }
 
-    public void move(MotionEvent arg1) {
+    public void move(MotionEvent arg1, Bluetooth bt) {
         position_x = (int) (arg1.getX() - (params.width / 2));
         position_y = (int) (arg1.getY() - (params.height / 2));
         distance = (float) Math.sqrt(Math.pow(position_x, 2) + Math.pow(position_y, 2));
@@ -86,8 +95,27 @@ public class JoyStickClass {
                 mLayout.removeView(draw);
             }
         } else if(arg1.getAction() == MotionEvent.ACTION_UP) {
-            mLayout.removeView(draw);
+            draw.position(params.width / 2, params.height / 2);
             touch_state = false;
+        }
+
+        if (arg1.getAction() == MotionEvent.ACTION_DOWN
+                || arg1.getAction() == MotionEvent.ACTION_MOVE) {
+
+            int direction = get4Direction();
+            if (direction == JoyStickClass.STICK_UP) {
+                bt.send("w");
+            } else if (direction == JoyStickClass.STICK_RIGHT) {
+                bt.send("d");
+            } else if (direction == JoyStickClass.STICK_DOWN) {
+                bt.send("s");
+            } else if (direction == JoyStickClass.STICK_LEFT) {
+                bt.send("a");
+            } else if (direction == JoyStickClass.STICK_NONE) {
+                bt.send("f");
+            }
+        } else if(arg1.getAction() == MotionEvent.ACTION_UP) {
+            bt.send("f");
         }
     }
 
