@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -44,6 +45,8 @@ public class Bluetooth {
     public String selectedDeviceName = "";
     private String res = "";
     private int speed = 0;
+    private String speedString = "";
+    private TextView currentSpeed;
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
@@ -51,7 +54,7 @@ public class Bluetooth {
     As for the bluetooth adapter, you must first declare a variable by writing:
     BluetoothAdapter adapterName = BluetoothAdapter.getDefaultAdapter(); This is your adapter that you will enter in the constructor.
     */
-    public Bluetooth(final Context context, BluetoothAdapter adapter, Activity activity) {
+    public Bluetooth(final Context context, BluetoothAdapter adapter, final Activity activity) {
         this.context = context;
         this.adapter = adapter;
         this.activity = activity;
@@ -68,23 +71,36 @@ public class Bluetooth {
 
         //Input thread
         final Handler handler1 = new Handler();
+        currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
                     while (input!=null) {
                         try {
-                            String tmp = input.readLine();
-                            speed = Integer.parseInt(tmp);
-                            System.out.println(speed); // Print speed
+                            speedString = input.readLine();
+                            speed = Integer.parseInt(speedString);
+
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // This code will always run on the UI thread, therefore is safe to modify UI elements.
+                                    currentSpeed.setText(speedString);
+                                }
+                            });
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
                     }
                 }
+
+
+
             }
         });
     }
+
+
 
     //Enable bluetooth
     public void enableBT() {
@@ -189,6 +205,7 @@ public class Bluetooth {
 
         }
     }
+
 
     //This is the function that returns devices to us
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
