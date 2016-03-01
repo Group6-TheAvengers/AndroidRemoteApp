@@ -47,6 +47,8 @@ public class Bluetooth {
     private int speed = 0;
     private String speedString = "";
     private TextView currentSpeed;
+    private String distance;
+    private TextView currentDistance;
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
@@ -72,19 +74,29 @@ public class Bluetooth {
         //Input thread
         final Handler handler1 = new Handler();
         currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
+        currentDistance = (TextView) activity.findViewById(R.id.currentDistance);
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
                     while (input!=null) {
                         try {
-                            speedString = input.readLine();
-                            speed = Integer.parseInt(speedString);
+                            System.out.println(input.readLine());
+                            if (input.readLine().startsWith("s")) {
+                                speedString = input.readLine().substring(1);
+
+                            } else {
+                                distance = input.readLine().substring(1);
+
+
+
+                            }
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                                    currentSpeed.setText(speedString + " km/h");
+                                    currentSpeed.setText(distance + " m/s");
+                                    currentDistance.setText(speedString + "m");
                                 }
                             });
                         } catch (IOException e) {

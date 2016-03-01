@@ -89,11 +89,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="0 km/h"
+        android:text="0 m/s"
         android:textSize="50dp"
         android:id="@+id/currentSpeed"
         android:layout_below="@+id/gridLayout"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0m"
+        android:id="@+id/currentDistance"
+        android:layout_alignRight="@+id/currentSpeed"
+        android:layout_alignEnd="@+id/currentSpeed"
+        android:layout_marginRight="71dp"
+        android:layout_marginEnd="71dp"
+        android:layout_below="@+id/currentSpeed" />
 
 
 </RelativeLayout>
