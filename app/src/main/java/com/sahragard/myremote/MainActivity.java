@@ -2,15 +2,15 @@ package com.sahragard.myremote;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     public Button enableBT;
     public Button disableBT;
     public Button connectDevice;
+    public Button distanceToDB;
+    SaveToDatabase db = new SaveToDatabase();
 
     RelativeLayout layout_joystick;
     JoyStickClass js;
@@ -27,9 +29,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         final Bluetooth bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
+
+        distanceToDB = (Button) findViewById(R.id.distanceToDB);
+
+        distanceToDB.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                if (v == distanceToDB) {
+                    db.register(bt.getDistance());
+                }
+            }
+        });
+
+
+
 
         //Displays bluetooth status in the top
         statusUpdate = (TextView) findViewById(R.id.statusUpdate);
@@ -46,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Start bluetooth and find devices
         enableBT = (Button) findViewById(R.id.connect);
-        enableBT.setOnClickListener(new Button.OnClickListener() {
+        enableBT.setOnClickListener(new Button.OnClickListener()     {
             public void onClick(View v) {
                 if (!btAdapter.isEnabled()) {
                     bt.enableBT();
@@ -59,11 +72,14 @@ public class MainActivity extends AppCompatActivity {
                     bt.findDevices();
 
 
-
                     statusUpdate.setText("Bluetooth on");
                 } else {
                     Toast.makeText(MainActivity.this, "Bluetooth already enabled", Toast.LENGTH_SHORT).show();
                 }
+
+
+
+
             }
         });
 
@@ -77,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 bt.getDeviceList().clear();
                 statusUpdate.setText("Bluetooth off");
             }
+
+
         });
 
         //Connect to selected device
@@ -93,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
+        layout_joystick = (RelativeLayout) findViewById(R.id.layout_joystick);
 
         js = new JoyStickClass(getApplicationContext()
-                ,layout_joystick , R.drawable.image_button, bt);
+                , layout_joystick, R.drawable.image_button, bt);
         js.setStickSize(150, 150);
         js.setLayoutSize(500, 500);
         js.setLayoutAlpha(150);
@@ -106,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
         js.drawStick();
 
 
-
     }
+
+
 }
+
