@@ -93,7 +93,8 @@
         android:textSize="50dp"
         android:id="@+id/currentSpeed"
         android:layout_below="@+id/gridLayout"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -101,10 +102,18 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0m"
         android:id="@+id/currentDistance"
-        android:layout_alignRight="@+id/currentSpeed"
-        android:layout_alignEnd="@+id/currentSpeed"
-        android:layout_marginRight="71dp"
-        android:layout_marginEnd="71dp"
-        android:layout_below="@+id/currentSpeed" />
+        android:textSize="50dp"
+        android:layout_alignTop="@+id/currentSpeed"
+        android:layout_alignRight="@+id/gridLayout"
+        android:layout_alignEnd="@+id/gridLayout" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send to DB"
+        android:id="@+id/distanceToDB"
+        android:layout_below="@+id/currentDistance"
+        android:layout_alignRight="@+id/currentDistance"
+        android:layout_alignEnd="@+id/currentDistance" />
 
 </RelativeLayout>

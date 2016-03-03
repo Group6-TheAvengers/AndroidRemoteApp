@@ -22,14 +22,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
+
 
 /**
  * Created by Coco on 2016-02-22.
  */
 
-public class Bluetooth {
+public class Bluetooth  {
     private Context context;
     private BluetoothAdapter adapter;
     private BluetoothDevice device;
@@ -49,6 +49,7 @@ public class Bluetooth {
     private TextView currentSpeed;
     private String distance;
     private TextView currentDistance;
+    SaveToDatabase db = new SaveToDatabase();
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
@@ -78,7 +79,7 @@ public class Bluetooth {
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
-                    while (input!=null) {
+                    while (input != null) {
                         try {
                             System.out.println(input.readLine());
                             if (input.readLine().startsWith("s")) {
@@ -86,7 +87,6 @@ public class Bluetooth {
 
                             } else {
                                 distance = input.readLine().substring(1);
-
 
 
                             }
@@ -107,11 +107,9 @@ public class Bluetooth {
                 }
 
 
-
             }
         });
     }
-
 
 
     //Enable bluetooth
@@ -157,6 +155,10 @@ public class Bluetooth {
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
         context.registerReceiver(mReceiver, filter);
+    }
+
+    public String getDistance() {
+        return (String) currentDistance.getText();
     }
 
     public Spinner getDeviceSpinner() {
@@ -262,4 +264,6 @@ public class Bluetooth {
             }
         }
     };
+
+
 }
