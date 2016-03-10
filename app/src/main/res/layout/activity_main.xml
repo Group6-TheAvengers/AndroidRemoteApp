@@ -73,7 +73,14 @@
 
 
     </GridLayout>
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send to DB"
+        android:id="@+id/distanceToDB"
+        android:layout_below="@+id/currentDistance"
+        android:layout_alignRight="@+id/currentDistance"
+        android:layout_alignEnd="@+id/currentDistance" />
     <RelativeLayout
         android:id="@+id/layout_joystick"
         android:layout_width="200dp"
@@ -89,20 +96,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="0 m/s"
-        android:textSize="50dp"
+        android:text="0.0 m/s"
+        android:textSize="35dp"
         android:id="@+id/currentSpeed"
         android:layout_below="@+id/gridLayout"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="0m"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0.0 m"
         android:id="@+id/currentDistance"
-        android:layout_above="@+id/layout_joystick"
-        android:layout_centerHorizontal="true" />
-
+        android:textSize="35dp"
+        android:layout_alignTop="@+id/currentSpeed"
+        android:layout_alignRight="@+id/gridLayout"
+        android:layout_alignEnd="@+id/gridLayout" />
 
 </RelativeLayout>

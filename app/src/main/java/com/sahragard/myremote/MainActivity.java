@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     public Button distanceToDB;
     SaveToDatabase db = new SaveToDatabase();
 
+    TextView textView, textView2;
     RelativeLayout layout_joystick;
     JoyStickClass js;
 
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        textView = (TextView)findViewById(R.id.textView);
+        textView2 = (TextView)findViewById(R.id.textView2);
         final Bluetooth bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
 
         distanceToDB = (Button) findViewById(R.id.distanceToDB);
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Start bluetooth and find devices
         enableBT = (Button) findViewById(R.id.connect);
-        enableBT.setOnClickListener(new Button.OnClickListener()     {
+        enableBT.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 if (!btAdapter.isEnabled()) {
                     bt.enableBT();
@@ -76,10 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MainActivity.this, "Bluetooth already enabled", Toast.LENGTH_SHORT).show();
                 }
-
-
-
-
             }
         });
 
@@ -93,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 bt.getDeviceList().clear();
                 statusUpdate.setText("Bluetooth off");
             }
-
-
         });
 
         //Connect to selected device
@@ -111,21 +108,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        layout_joystick = (RelativeLayout) findViewById(R.id.layout_joystick);
-
+        //Draw Outer JoyStick
+        layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
+        //Create Inner JoyStick
         js = new JoyStickClass(getApplicationContext()
-                , layout_joystick, R.drawable.image_button, bt);
+                ,layout_joystick , R.drawable.image_button, bt, textView, textView2);
+        //Set the size of Inner Joystick
         js.setStickSize(150, 150);
+        //Set the size of Outer Joystick
         js.setLayoutSize(500, 500);
+        //Opacity of Joystick Inner Background
         js.setLayoutAlpha(150);
+        //Opacity of Outer Joystick
         js.setStickAlpha(100);
+        //Create Joystick Boundary
         js.setOffset(90);
-        js.setMinimumDistance(50);
+        //Set the distance to when the outer joystick can active
+        js.setMinimumDistance(0);
+        //Draw inner Joystick
         js.drawStick();
 
 
     }
-
-
 }
-
