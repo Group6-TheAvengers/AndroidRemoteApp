@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     public Button disableBT;
     public Button connectDevice;
     public Button distanceToDB;
+    public Button lineFollowingButton;
+    public boolean linefollowing = false;
     SaveToDatabase db = new SaveToDatabase();
 
     TextView textView, textView2;
@@ -30,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView)findViewById(R.id.textView);
-        textView2 = (TextView)findViewById(R.id.textView2);
+        //textView = (TextView)findViewById(R.id.textView);
+        //textView2 = (TextView)findViewById(R.id.textView2);
         final Bluetooth bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
 
         distanceToDB = (Button) findViewById(R.id.distanceToDB);
@@ -104,6 +106,20 @@ public class MainActivity extends AppCompatActivity {
                             bt.connect(device);
                         }
                     }
+                }
+            }
+        });
+
+        //Enable line following
+        lineFollowingButton = (Button) findViewById(R.id.lineFollowingButton);
+        lineFollowingButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                if(linefollowing == true) {
+                    bt.send("m");
+                    linefollowing = false;
+                } else {
+                    bt.send("q");
+                    linefollowing = true;
                 }
             }
         });

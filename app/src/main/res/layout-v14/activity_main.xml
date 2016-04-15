@@ -115,23 +115,16 @@
         android:layout_below="@+id/currentDistance"
         android:layout_alignRight="@+id/currentDistance"
         android:layout_alignEnd="@+id/currentDistance" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="x"
-        android:id="@+id/textView"
-        android:layout_below="@+id/gridLayout"
-        android:layout_toLeftOf="@+id/layout_joystick"
-        android:layout_toStartOf="@+id/layout_joystick"/>
 
-    <TextView
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="y"
-        android:id="@+id/textView2"
-        android:layout_alignTop="@+id/textView"
-        android:layout_toRightOf="@+id/layout_joystick"
-        android:layout_toEndOf="@+id/layout_joystick"/>
+        android:text="Line following"
+        android:id="@+id/lineFollowingButton"
+        android:layout_alignBottom="@+id/distanceToDB"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 
 </RelativeLayout>

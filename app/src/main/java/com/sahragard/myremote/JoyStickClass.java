@@ -74,9 +74,9 @@ public class JoyStickClass {
         layout.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent arg1) {
                 move(arg1, bt);
-                textView.setText("X : " + currentM);
+                //textView.setText("X : " + currentM);
                 //textView.setText("X : " + String.valueOf(getX()));
-                textView2.setText("Y : " + (int) distance);
+                //textView2.setText("Y : " + (int) distance);
                 //textView2.setText("Y : " + String.valueOf(getY()));
                 return true;
             }
