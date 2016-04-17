@@ -114,12 +114,14 @@ public class MainActivity extends AppCompatActivity {
         lineFollowingButton = (Button) findViewById(R.id.lineFollowingButton);
         lineFollowingButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                if(linefollowing == true) {
-                    bt.send("m");
-                    linefollowing = false;
-                } else {
+                if(linefollowing == false) {
+                    // Enables line following
                     bt.send("q");
                     linefollowing = true;
+                } else {
+                    // Disables line following
+                    bt.send("m");
+                    linefollowing = false;
                 }
             }
         });
