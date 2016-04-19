@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,8 +50,6 @@ public class Bluetooth  {
     private TextView currentSpeed;
     private String distance;
     private TextView currentDistance;
-    SaveToDatabase db = new SaveToDatabase();
-
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
     In our example our context is "MainActivity.this".
@@ -87,6 +86,7 @@ public class Bluetooth  {
 
                             } else {
                                 distance = input.readLine().substring(1);
+
 
 
                             }

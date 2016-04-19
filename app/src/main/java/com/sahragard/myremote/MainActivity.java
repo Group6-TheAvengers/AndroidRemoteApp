@@ -18,10 +18,8 @@ public class MainActivity extends AppCompatActivity {
     public Button enableBT;
     public Button disableBT;
     public Button connectDevice;
-    public Button distanceToDB;
     public Button lineFollowingButton;
     public boolean linefollowing = false;
-    SaveToDatabase db = new SaveToDatabase();
 
     TextView textView, textView2;
     RelativeLayout layout_joystick;
@@ -36,15 +34,6 @@ public class MainActivity extends AppCompatActivity {
         //textView2 = (TextView)findViewById(R.id.textView2);
         final Bluetooth bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
 
-        distanceToDB = (Button) findViewById(R.id.distanceToDB);
-
-        distanceToDB.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                if (v == distanceToDB) {
-                    db.register(bt.getDistance());
-                }
-            }
-        });
 
 
 
