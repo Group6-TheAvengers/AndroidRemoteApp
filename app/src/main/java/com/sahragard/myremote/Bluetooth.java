@@ -8,8 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,31 +23,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
-/**
- * Created by Coco on 2016-02-22.
- */
-
-public class Bluetooth  {
+public class Bluetooth {
     private Context context;
     private BluetoothAdapter adapter;
     private BluetoothDevice device;
     private List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
     private List<String> bluetoothDeviceNames = new ArrayList<String>();
-    private Thread workerThread;
-    private Thread inputThread;
+    private Thread workerThread, inputThread;
     private BufferedReader input;
     private PrintWriter output;
     private Activity activity;
     private BluetoothSocket btSocket;
     public Spinner spinner;
-    public String selectedDeviceName = "";
-    private String res = "";
     private int speed = 0;
-    private String speedString = "";
-    private TextView currentSpeed;
+    private String speedString, res, selectedDeviceName = "";
+    private TextView currentSpeed, currentDistance;
     private String distance;
-    private TextView currentDistance;
+
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
     In our example our context is "MainActivity.this".
@@ -62,7 +52,6 @@ public class Bluetooth  {
         this.activity = activity;
 
         //Output thread
-        final Handler handler = new Handler();
         workerThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
@@ -72,7 +61,6 @@ public class Bluetooth  {
         });
 
         //Input thread
-        final Handler handler1 = new Handler();
         currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
         currentDistance = (TextView) activity.findViewById(R.id.currentDistance);
         inputThread = new Thread(new Runnable() {
@@ -83,14 +71,9 @@ public class Bluetooth  {
                             System.out.println(input.readLine());
                             if (input.readLine().startsWith("s")) {
                                 speedString = input.readLine().substring(1);
-
                             } else {
                                 distance = input.readLine().substring(1);
-
-
-
                             }
-
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -102,15 +85,11 @@ public class Bluetooth  {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }
-
-
             }
         });
     }
-
 
     //Enable bluetooth
     public void enableBT() {
@@ -174,7 +153,6 @@ public class Bluetooth  {
             }
 
             public void onNothingSelected(AdapterView parent) {
-                // Do nothing.
             }
         });
 
@@ -187,7 +165,6 @@ public class Bluetooth  {
     public ArrayAdapter getDeviceList() {
         ArrayAdapter arrayAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_item, getBluetoothDeviceNames());
-
         return arrayAdapter;
     }
 
@@ -203,9 +180,7 @@ public class Bluetooth  {
                 input = new BufferedReader(new InputStreamReader(btSocket.getInputStream()));
                 inputThread.start();
                 Toast.makeText(context, "Connected to " + device.getName(), Toast.LENGTH_SHORT).show();
-
             } catch (IOException e) {
-
             }
         }
     }
@@ -216,7 +191,6 @@ public class Bluetooth  {
             output.println(msg);
             output.flush();
         } catch (Exception e) {
-
         }
     }
 
@@ -239,8 +213,6 @@ public class Bluetooth  {
                     Toast.makeText(context, "Discovery finished", Toast.LENGTH_SHORT).show();
                     getDeviceSpinner();
                     context.unregisterReceiver(mReceiver);
-
-
                     //When a bluetooth device is found
                 } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                     //bluetooth device found
@@ -264,6 +236,4 @@ public class Bluetooth  {
             }
         }
     };
-
-
 }
