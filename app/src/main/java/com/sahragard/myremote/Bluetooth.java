@@ -36,7 +36,8 @@ public class Bluetooth {
     private BluetoothSocket btSocket;
     public Spinner spinner;
     private int speed = 0;
-    private String speedString, res, selectedDeviceName = "";
+    public String selectedDeviceName = "";
+    private String speedString;
     private TextView currentSpeed, currentDistance;
     private String distance;
 
