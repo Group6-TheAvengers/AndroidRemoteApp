@@ -39,6 +39,7 @@ public class Bluetooth {
     private String speedString;
     private TextView currentSpeed, currentDistance;
     private String distance;
+    private boolean isConnected = false;
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
@@ -78,8 +79,8 @@ public class Bluetooth {
                                 @Override
                                 public void run() {
                                     // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                                    currentSpeed.setText(distance + " m/s");
-                                    currentDistance.setText(speedString + "m");
+                                    //currentSpeed.setText(distance + " m/s");
+                                    //currentDistance.setText(speedString + "m");
                                 }
                             });
                         } catch (IOException e) {
@@ -100,7 +101,10 @@ public class Bluetooth {
             Toast.makeText(context, "Bluetooth already enabled", Toast.LENGTH_SHORT).show();
         }
     }
-
+    //Get connected status
+    public boolean isConnected(){
+        return isConnected;
+    }
     //Disable bluetooth
     public void disableBT() {
         if (adapter.isEnabled()) {
@@ -180,6 +184,7 @@ public class Bluetooth {
                 input = new BufferedReader(new InputStreamReader(btSocket.getInputStream()));
                 inputThread.start();
                 Toast.makeText(context, "Connected to " + device.getName(), Toast.LENGTH_SHORT).show();
+                isConnected = true;
             } catch (IOException e) {
             }
         }
