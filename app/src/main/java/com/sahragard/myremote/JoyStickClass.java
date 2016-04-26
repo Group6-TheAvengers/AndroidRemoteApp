@@ -55,7 +55,7 @@ public class JoyStickClass {
     private String where;
     private String currentM;
 
-    public JoyStickClass (Context context, ViewGroup layout, int stick_res_id, final Bluetooth bt, final TextView textView, final TextView textView2) {
+    public JoyStickClass (Context context, ViewGroup layout, int stick_res_id, final Bluetooth bt) {
 
         mContext = context;
 
@@ -74,10 +74,7 @@ public class JoyStickClass {
         layout.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent arg1) {
                 move(arg1, bt);
-                //textView.setText("X : " + currentM);
-                //textView.setText("X : " + String.valueOf(getX()));
-                //textView2.setText("Y : " + (int) distance);
-                //textView2.setText("Y : " + String.valueOf(getY()));
+
                 return true;
             }
         });

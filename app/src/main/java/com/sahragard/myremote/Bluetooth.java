@@ -34,12 +34,12 @@ public class Bluetooth {
     private PrintWriter output;
     private Activity activity;
     private BluetoothSocket btSocket;
-    public Spinner spinner;
     public String selectedDeviceName = "";
     private String speedString;
     private TextView currentSpeed, currentDistance;
     private String distance;
     private boolean isConnected = false;
+    private Spinner deviceSpinner;
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.
@@ -145,7 +145,12 @@ public class Bluetooth {
     }
 
     public Spinner getDeviceSpinner() {
-        spinner = (Spinner) activity.findViewById(R.id.spinner);
+        deviceSpinner = (Spinner) activity.findViewById(R.id.spinner);
+
+        return deviceSpinner;
+    }
+
+    public void fillSpinner(final Spinner spinner) {
         ArrayAdapter deviceAdapter = getDeviceList();
 
         //Spinner that contains devices to connect to
@@ -161,8 +166,6 @@ public class Bluetooth {
         });
 
         spinner.setAdapter(deviceAdapter);
-
-        return spinner;
     }
 
     //Returns the array adapter which contains the strings for the spinner
@@ -216,7 +219,7 @@ public class Bluetooth {
                 } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                     //discovery finishes, dismis progress dialog
                     Toast.makeText(context, "Discovery finished", Toast.LENGTH_SHORT).show();
-                    getDeviceSpinner();
+                    fillSpinner(getDeviceSpinner());
                     context.unregisterReceiver(mReceiver);
                     //When a bluetooth device is found
                 } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {

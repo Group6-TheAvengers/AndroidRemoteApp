@@ -11,12 +11,13 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-    public TextView statusUpdate;
-    public Button enableBT,disableBT, connectDevice,lineFollowingButton;
-    public boolean linefollowing = false;
-    TextView textView, textView2;
-    RelativeLayout layout_joystick;
-    JoyStickClass js;
+    private TextView statusUpdate, currentSpeed, currentDistance;
+    private Button enableBT,disableBT, connectDevice,lineFollowingButton;
+    private boolean linefollowing = false;
+    private RelativeLayout layout_joystick;
+    private JoyStickClass js;
+    private boolean connectScreen = true;
+    private Bluetooth bt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         //textView = (TextView)findViewById(R.id.textView);
         //textView2 = (TextView)findViewById(R.id.textView2);
-        final Bluetooth bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
+        bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
+        currentSpeed = (TextView) findViewById(R.id.currentSpeed);
+        currentDistance = (TextView) findViewById(R.id.currentDistance);
 
         //Displays bluetooth status in the top
         statusUpdate = (TextView) findViewById(R.id.statusUpdate);
@@ -74,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         connectDevice = (Button) findViewById(R.id.connectDevice);
         connectDevice.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                for (BluetoothDevice device : bt.getBluetoothDevices()) {
-                    if (device != null) {
-                        if (device.getName().equals(bt.selectedDeviceName)) {
-                            bt.connect(device);
-                        }
-                    }
-                }
+                //for (BluetoothDevice device : bt.getBluetoothDevices()) {
+                   // if (device != null) {
+                     //   if (device.getName().equals(bt.selectedDeviceName)) {
+                            changeInterface();
+                       // }
+                    //}
+                //}
             }
         });
 
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
         //Create Inner JoyStick
         js = new JoyStickClass(getApplicationContext()
-                ,layout_joystick , R.drawable.image_button, bt, textView, textView2);
+                ,layout_joystick , R.drawable.image_button, bt);
         //Set the size of Inner Joystick
         js.setStickSize(150, 150);
         //Set the size of Outer Joystick
@@ -119,5 +122,48 @@ public class MainActivity extends AppCompatActivity {
         js.setMinimumDistance(0);
         //Draw inner Joystick
         js.drawStick();
+
+        // HIDE
+        layout_joystick.setVisibility(View.INVISIBLE);
+        lineFollowingButton.setVisibility(View.INVISIBLE);
+        currentSpeed.setVisibility(View.INVISIBLE);
+        currentDistance.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void changeInterface() {
+        if (connectScreen) {
+            connectScreen = false;
+            // SHOW
+            layout_joystick.setVisibility(View.VISIBLE);
+            lineFollowingButton.setVisibility(View.VISIBLE);
+            currentSpeed.setVisibility(View.VISIBLE);
+            currentDistance.setVisibility(View.VISIBLE);
+
+            //HIDE
+
+            statusUpdate.setVisibility(View.INVISIBLE);
+            connectDevice.setVisibility(View.INVISIBLE);
+            enableBT.setVisibility(View.INVISIBLE);
+            disableBT.setVisibility(View.INVISIBLE);
+            bt.getDeviceSpinner().setVisibility(View.INVISIBLE);
+
+        } else {
+            connectScreen = true;
+            // SHOW
+            statusUpdate.setVisibility(View.VISIBLE);
+            connectDevice.setVisibility(View.VISIBLE);
+            enableBT.setVisibility(View.VISIBLE);
+            disableBT.setVisibility(View.VISIBLE);
+            bt.getDeviceSpinner().setVisibility(View.VISIBLE);
+
+            //HIDE
+            layout_joystick.setVisibility(View.VISIBLE);
+            lineFollowingButton.setVisibility(View.VISIBLE);
+            currentSpeed.setVisibility(View.VISIBLE);
+            currentDistance.setVisibility(View.VISIBLE);
+
+
+        }
     }
 }
