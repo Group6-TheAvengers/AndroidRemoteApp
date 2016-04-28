@@ -54,10 +54,10 @@ public class JoyStickClass {
     private boolean touch_state = false;
 
 
-    public JoyStickClass(Context context, ViewGroup layout, int stick_res_id, final Bluetooth bt, final TextView textView) {
+    public JoyStickClass(Context context, ViewGroup layout, int stick_res_id, final Bluetooth bt) {
 
         mContext = context;
-        car = new SmartCar(bt, textView);
+        car = new SmartCar(bt);
         stick = BitmapFactory.decodeResource(mContext.getResources(),
                 stick_res_id);
 
