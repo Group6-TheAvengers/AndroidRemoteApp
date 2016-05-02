@@ -18,14 +18,14 @@ public class MainActivity extends AppCompatActivity {
     private JoyStickClass js;
     private boolean connectScreen = true;
     private Bluetooth bt;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //textView = (TextView)findViewById(R.id.textView);
-        //textView2 = (TextView)findViewById(R.id.textView2);
+        textView = (TextView)findViewById(R.id.textView);
         bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
         currentSpeed = (TextView) findViewById(R.id.currentSpeed);
         currentDistance = (TextView) findViewById(R.id.currentDistance);
@@ -77,13 +77,14 @@ public class MainActivity extends AppCompatActivity {
         connectDevice = (Button) findViewById(R.id.connectDevice);
         connectDevice.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //for (BluetoothDevice device : bt.getBluetoothDevices()) {
-                   // if (device != null) {
-                     //   if (device.getName().equals(bt.selectedDeviceName)) {
+                for (BluetoothDevice device : bt.getBluetoothDevices()) {
+                    if (device != null) {
+                       if (device.getName().equals(bt.selectedDeviceName)) {
                             changeInterface();
-                       // }
-                    //}
-                //}
+                            bt.connect(device);
+                        }
+                    }
+                }
             }
         });
 
@@ -104,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Draw Outer JoyStick
-        layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
+        layout_joystick = (RelativeLayout) findViewById(R.id.layout_joystick);
         //Create Inner JoyStick
         js = new JoyStickClass(getApplicationContext()
-                ,layout_joystick , R.drawable.image_button, bt);
+                ,layout_joystick , R.drawable.image_button, bt, textView);
         //Set the size of Inner Joystick
         js.setStickSize(150, 150);
         //Set the size of Outer Joystick

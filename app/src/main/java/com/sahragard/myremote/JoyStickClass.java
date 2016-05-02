@@ -54,10 +54,10 @@ public class JoyStickClass {
     private boolean touch_state = false;
 
 
-    public JoyStickClass(Context context, ViewGroup layout, int stick_res_id, final Bluetooth bt) {
+    public JoyStickClass(Context context, ViewGroup layout, int stick_res_id, final Bluetooth bt, final TextView textView) {
 
         mContext = context;
-        car = new SmartCar(bt);
+        car = new SmartCar(bt, textView);
         stick = BitmapFactory.decodeResource(mContext.getResources(),
                 stick_res_id);
 
@@ -135,11 +135,11 @@ public class JoyStickClass {
             } else if (direction == JoyStickClass.STICK_UPRIGHT) {
                 STICK_UPRIGHT(direction);
             } else if (direction == JoyStickClass.STICK_UPRIGHTRIGHT) {
-                STICK_UPRIGHT(direction);
+                STICK_UPRIGHTRIGHT(direction);
             } else if (direction == JoyStickClass.STICK_RIGHT) {
                 STICK_RIGHT(direction);
             } else if (direction == JoyStickClass.STICK_DOWNRIGHTRIGHT) {
-                STICK_DOWNRIGHT(direction);
+                STICK_DOWNRIGHTRIGHT(direction);
             } else if (direction == JoyStickClass.STICK_DOWNRIGHT) {
                 STICK_DOWNRIGHT(direction);
             } else if (direction == JoyStickClass.STICK_DOWN) {

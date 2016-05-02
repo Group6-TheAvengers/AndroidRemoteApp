@@ -8,20 +8,18 @@ public class SmartCar {
     private int currentSpeed;
     public static String currentDirection;
     private int distance;
-    private String backOrForth;
-    private static TextView textView;
+    private TextView textView;
 
-    public SmartCar(final Bluetooth bt) {
+    public SmartCar(final Bluetooth bt, final TextView textView) {
         this.bt = bt;
-        this.textView = textView;
         currentDirection = "isNotMoving";
-        textView.setText(currentDirection);
+        this.textView = textView;
     }
 
 
     public void moveForward(int speed) {
-        if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
-            currentDirection = "isForward";
+        if (currentDirection == "isNotMoving" || currentDirection == "isForward") {
+            currentDirection = "isNotMoving";
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -36,13 +34,12 @@ public class SmartCar {
                     System.out.println("------Working-----");
                     break;
             }
-            textView.setText(currentDirection);
         }
     }
 
     public void moveBackward(int speed) {
-        if(currentDirection == "isNotMoving" || currentDirection == "isBackward") {
-            currentDirection = "isBackward";
+        if (currentDirection == "isNotMoving" || currentDirection == "isBackward") {
+            currentDirection = "isNotMoving";
             switch (speed) {
                 case 1:
                     bt.send("d");
@@ -54,22 +51,45 @@ public class SmartCar {
                     bt.send("f");
                     break;
             }
-            textView.setText(currentDirection);
+
         }
     }
 
-    public void moveLeft(){
-        bt.send("l");
-
+    public void moveLeft() {
+        if (currentDirection == "isNotMoving" || currentDirection == "isForward") {
+            currentDirection = "isForward";
+            textView.setText("moveLeft");
+            bt.send("a");
+            bt.send("l");
+        }
+        if (currentDirection == "isBackward") {
+            currentDirection = "isBackward";
+            textView.setText("moveBLeft");
+            bt.send("d");
+            bt.send("l");
+        }
     }
 
-    public void moveRight(){
-        bt.send("i");
+    public void moveRight() {
+        if (currentDirection == "isForward") {
+            currentDirection = "isForward";
+            textView.setText("moveRight");
+            bt.send("a");
+            bt.send("i");
+        }
+        if (currentDirection == "isBackward") {
+            currentDirection = "isBackward";
+            textView.setText("moveBRight");
+            bt.send("d");
+            bt.send("i");
+        }
     }
+
 
     public void moveForwardLeft(int speed){
-        if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
+        if(currentDirection == "isForward") {
             currentDirection = "isForward";
+            textView.setText("moveFLeft");
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -81,7 +101,7 @@ public class SmartCar {
                     break;
                 case 3:
                     bt.send("c");
-                    bt.send("b");
+                    bt.send("j");
                     break;
             }
         }
@@ -90,6 +110,7 @@ public class SmartCar {
     public void moveForwardLeftLeft(int speed){
         if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
             currentDirection = "isForward";
+            textView.setText("moveFLeftLeft");
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -104,13 +125,14 @@ public class SmartCar {
                     bt.send("k");
                     break;
             }
-            textView.setText(currentDirection);
+
         }
     }
 
     public void moveForwardRight(int speed){
         if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
-            currentDirection = "isForward";
+            currentDirection = "isNotMoving";
+            textView.setText("moveFRight");
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -131,6 +153,7 @@ public class SmartCar {
     public void moveForwardRightRight(int speed){
         if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
             currentDirection = "isForward";
+            textView.setText("moveFRightRight");
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -150,7 +173,7 @@ public class SmartCar {
 
     public void moveBackwardLeft(int speed) {
         if(currentDirection == "isNotMoving" || currentDirection == "isBackward") {
-            currentDirection = "isBackward";
+            currentDirection = "isNotMoving";
             switch (speed) {
                 case 1:
                     bt.send("d");
@@ -190,7 +213,7 @@ public class SmartCar {
 
     public void moveBackwardRight(int speed) {
         if(currentDirection == "isNotMoving" || currentDirection == "isBackward") {
-            currentDirection = "isBackward";
+            currentDirection = "isNotMoving";
             switch (speed) {
                 case 1:
                     bt.send("d");
