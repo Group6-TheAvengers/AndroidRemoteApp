@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         //Create Joystick Boundary
         js.setOffset(90);
         //Set the distance to when the outer joystick can active
-        js.setMinimumDistance(0);
+        js.setMinimumDistance(30);
         //Draw inner Joystick
         js.drawStick();
 

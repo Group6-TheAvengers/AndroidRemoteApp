@@ -122,12 +122,10 @@ public class JoyStickClass {
         //Motion Listioner
         if (arg1.getAction() == MotionEvent.ACTION_DOWN
                 || arg1.getAction() == MotionEvent.ACTION_MOVE) {
-            if (distance < 250 / 3) {
+            if (distance < 250 / 2) {
                 joyLevel = 1;
-            } else if (distance < (250 / 3) * 2) {
+            } else if (distance > 250 / 2) {
                 joyLevel = 2;
-            } else if (distance > (250 / 3) * 2) {
-                joyLevel = 3;
             }
             int direction = get12Direction();
             if (direction == JoyStickClass.STICK_UP) {

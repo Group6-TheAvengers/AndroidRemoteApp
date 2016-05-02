@@ -100,7 +100,7 @@ public class SmartCar {
                     bt.send("j");
                     break;
                 case 3:
-                    bt.send("c");
+                    bt.send("b");
                     bt.send("j");
                     break;
             }
@@ -121,7 +121,7 @@ public class SmartCar {
                     bt.send("k");
                     break;
                 case 3:
-                    bt.send("c");
+                    bt.send("b");
                     bt.send("k");
                     break;
             }
@@ -143,7 +143,7 @@ public class SmartCar {
                     bt.send("g");
                     break;
                 case 3:
-                    bt.send("c");
+                    bt.send("b");
                     bt.send("g");
                     break;
             }
@@ -164,7 +164,7 @@ public class SmartCar {
                     bt.send("h");
                     break;
                 case 3:
-                    bt.send("c");
+                    bt.send("b");
                     bt.send("h");
                     break;
             }
@@ -184,7 +184,7 @@ public class SmartCar {
                     bt.send("j");
                     break;
                 case 3:
-                    bt.send("f");
+                    bt.send("e");
                     bt.send("j");
                     break;
             }
@@ -204,7 +204,7 @@ public class SmartCar {
                     bt.send("k");
                     break;
                 case 3:
-                    bt.send("f");
+                    bt.send("e");
                     bt.send("k");
                     break;
             }
@@ -224,7 +224,7 @@ public class SmartCar {
                     bt.send("g");
                     break;
                 case 3:
-                    bt.send("f");
+                    bt.send("e");
                     bt.send("g");
                     break;
             }
@@ -244,7 +244,7 @@ public class SmartCar {
                     bt.send("h");
                     break;
                 case 3:
-                    bt.send("f");
+                    bt.send("e");
                     bt.send("h");
                     break;
             }
