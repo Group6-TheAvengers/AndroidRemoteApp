@@ -81,7 +81,7 @@ public class SmartCar {
                     break;
                 case 3:
                     bt.send("c");
-                    bt.send("b");
+                    bt.send("j");
                     break;
             }
         }
