@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         //Draw inner Joystick
         js.drawStick();
 
+
         // HIDE
         layout_joystick.setVisibility(View.INVISIBLE);
         lineFollowingButton.setVisibility(View.INVISIBLE);
