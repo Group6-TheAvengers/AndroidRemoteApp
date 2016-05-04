@@ -40,6 +40,7 @@ public class Bluetooth {
     private String distance;
     private boolean isConnected = false;
     private Spinner deviceSpinner;
+    //NEW
 
     /*
     When creating a new instance of the bluetooth class, you must enter the context.

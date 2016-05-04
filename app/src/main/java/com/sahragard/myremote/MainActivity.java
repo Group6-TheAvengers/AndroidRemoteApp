@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean connectScreen = true;
     private Bluetooth bt;
     private TextView textView;
+    // NEW
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
