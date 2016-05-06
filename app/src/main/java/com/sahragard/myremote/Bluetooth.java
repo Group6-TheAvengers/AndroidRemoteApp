@@ -71,9 +71,9 @@ public class Bluetooth {
                         try {
                             if (isConnected() == true) {
                                 if(addTextViews == true) {
-                                    addTextViews = false;
                                     currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
                                     currentDistance = (TextView) activity.findViewById(R.id.currentDistance);
+                                    addTextViews = false;
                                 }
                             }
                             System.out.println(input.readLine());

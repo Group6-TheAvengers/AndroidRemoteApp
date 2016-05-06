@@ -1,19 +1,16 @@
 package com.sahragard.myremote;
 
-import android.widget.TextView;
-
 public class SmartCar {
 
     private Bluetooth bt;
     private int currentSpeed;
     public static String currentDirection;
     private int distance;
-    private TextView textView;
 
-    public SmartCar(final Bluetooth bt, final TextView textView) {
+    public SmartCar(final Bluetooth bt) {
         this.bt = bt;
         currentDirection = "isNotMoving";
-        this.textView = textView;
+
     }
 
 
@@ -58,13 +55,13 @@ public class SmartCar {
     public void moveLeft() {
         if (currentDirection == "isNotMoving" || currentDirection == "isForward") {
             currentDirection = "isForward";
-            textView.setText("moveLeft");
+
             bt.send("a");
             bt.send("l");
         }
         if (currentDirection == "isBackward") {
             currentDirection = "isBackward";
-            textView.setText("moveBLeft");
+
             bt.send("d");
             bt.send("l");
         }
@@ -73,13 +70,13 @@ public class SmartCar {
     public void moveRight() {
         if (currentDirection == "isForward") {
             currentDirection = "isForward";
-            textView.setText("moveRight");
+
             bt.send("a");
             bt.send("i");
         }
         if (currentDirection == "isBackward") {
             currentDirection = "isBackward";
-            textView.setText("moveBRight");
+
             bt.send("d");
             bt.send("i");
         }
@@ -89,7 +86,7 @@ public class SmartCar {
     public void moveForwardLeft(int speed){
         if(currentDirection == "isForward") {
             currentDirection = "isForward";
-            textView.setText("moveFLeft");
+
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -110,7 +107,7 @@ public class SmartCar {
     public void moveForwardLeftLeft(int speed){
         if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
             currentDirection = "isForward";
-            textView.setText("moveFLeftLeft");
+
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -132,7 +129,7 @@ public class SmartCar {
     public void moveForwardRight(int speed){
         if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
             currentDirection = "isNotMoving";
-            textView.setText("moveFRight");
+
             switch (speed) {
                 case 1:
                     bt.send("a");
@@ -153,7 +150,7 @@ public class SmartCar {
     public void moveForwardRightRight(int speed){
         if(currentDirection == "isNotMoving" || currentDirection == "isForward") {
             currentDirection = "isForward";
-            textView.setText("moveFRightRight");
+
             switch (speed) {
                 case 1:
                     bt.send("a");
