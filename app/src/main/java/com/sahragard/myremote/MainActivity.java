@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean connectScreen = true;
     private Bluetooth bt;
     private TextView textView;
+    private Switch btSwitch;
     // NEW
 
     @Override
@@ -26,25 +28,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView)findViewById(R.id.textView);
         bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
         currentSpeed = (TextView) findViewById(R.id.currentSpeed);
         currentDistance = (TextView) findViewById(R.id.currentDistance);
+        btSwitch = (Switch) findViewById(R.id.btSwitch);
 
         //Displays bluetooth status in the top
-        statusUpdate = (TextView) findViewById(R.id.statusUpdate);
         if (btAdapter.isEnabled()) {
-            statusUpdate.setText("Bluetooth on");
+            btSwitch.setChecked(true);
             btAdapter.startDiscovery();
             bt.findDevices();
 
         } else {
-            statusUpdate.setText("Bluetooth off");
+            btSwitch.setChecked(false);
         }
 
         //Start bluetooth and find devices
-        enableBT = (Button) findViewById(R.id.connect);
-        enableBT.setOnClickListener(new Button.OnClickListener() {
+        btSwitch.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 if (!btAdapter.isEnabled()) {
                     bt.enableBT();
@@ -55,24 +55,14 @@ public class MainActivity extends AppCompatActivity {
 
                     btAdapter.startDiscovery();
                     bt.findDevices();
-
-                    statusUpdate.setText("Bluetooth on");
                 } else {
-                    Toast.makeText(MainActivity.this, "Bluetooth already enabled", Toast.LENGTH_SHORT).show();
+                    bt.disableBT();
+                    //Clear list to prevent duplicate entries
+                    bt.getDeviceList().clear();
                 }
             }
         });
 
-        //Disable bluetooth
-        disableBT = (Button) findViewById(R.id.disconnect);
-        disableBT.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                bt.disableBT();
-                //Clear list to prevent duplicate entries
-                bt.getDeviceList().clear();
-                statusUpdate.setText("Bluetooth off");
-            }
-        });
 
         //Connect to selected device
         connectDevice = (Button) findViewById(R.id.connectDevice);
@@ -80,14 +70,39 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 for (BluetoothDevice device : bt.getBluetoothDevices()) {
                     if (device != null) {
-                       if (device.getName().equals(bt.selectedDeviceName)) {
-                            changeInterface();
+                        if (device.getName().equals(bt.selectedDeviceName)) {
+                            loadInterface();
                             bt.connect(device);
                         }
                     }
                 }
             }
         });
+    }
+
+    public void loadInterface() {
+
+        //Draw Outer JoyStick
+        layout_joystick = (RelativeLayout) findViewById(R.id.layout_joystick);
+        //Create Inner JoyStick
+        js = new JoyStickClass(getApplicationContext()
+                ,layout_joystick , R.drawable.joystick_dot, bt, textView);
+        //Set the size of Inner Joystick
+        js.setStickSize(150, 150);
+        //Set the size of Outer Joystick
+        js.setLayoutSize(500, 500);
+        //Opacity of Joystick Inner Background
+        js.setLayoutAlpha(150);
+        //Opacity of Outer Joystick
+        js.setStickAlpha(100);
+        //Create Joystick Boundary
+        js.setOffset(90);
+        //Set the distance to when the outer joystick can active
+        js.setMinimumDistance(30);
+        //Draw inner Joystick
+        js.drawStick();
+
+
 
         //Enable line following
         lineFollowingButton = (Button) findViewById(R.id.lineFollowingButton);
@@ -105,68 +120,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Draw Outer JoyStick
-        layout_joystick = (RelativeLayout) findViewById(R.id.layout_joystick);
-        //Create Inner JoyStick
-        js = new JoyStickClass(getApplicationContext()
-                ,layout_joystick , R.drawable.image_button, bt, textView);
-        //Set the size of Inner Joystick
-        js.setStickSize(150, 150);
-        //Set the size of Outer Joystick
-        js.setLayoutSize(500, 500);
-        //Opacity of Joystick Inner Background
-        js.setLayoutAlpha(150);
-        //Opacity of Outer Joystick
-        js.setStickAlpha(100);
-        //Create Joystick Boundary
-        js.setOffset(90);
-        //Set the distance to when the outer joystick can active
-        js.setMinimumDistance(30);
-        //Draw inner Joystick
-        js.drawStick();
-
-
-        // HIDE
-        layout_joystick.setVisibility(View.INVISIBLE);
-        lineFollowingButton.setVisibility(View.INVISIBLE);
-        currentSpeed.setVisibility(View.INVISIBLE);
-        currentDistance.setVisibility(View.INVISIBLE);
-
-    }
-
-    public void changeInterface() {
-        if (connectScreen) {
-            connectScreen = false;
-            // SHOW
-            layout_joystick.setVisibility(View.VISIBLE);
-            lineFollowingButton.setVisibility(View.VISIBLE);
-            currentSpeed.setVisibility(View.VISIBLE);
-            currentDistance.setVisibility(View.VISIBLE);
-
-            //HIDE
-
-            statusUpdate.setVisibility(View.INVISIBLE);
-            connectDevice.setVisibility(View.INVISIBLE);
-            enableBT.setVisibility(View.INVISIBLE);
-            disableBT.setVisibility(View.INVISIBLE);
-            bt.getDeviceSpinner().setVisibility(View.INVISIBLE);
-
-        } else {
-            connectScreen = true;
-            // SHOW
-            statusUpdate.setVisibility(View.VISIBLE);
-            connectDevice.setVisibility(View.VISIBLE);
-            enableBT.setVisibility(View.VISIBLE);
-            disableBT.setVisibility(View.VISIBLE);
-            bt.getDeviceSpinner().setVisibility(View.VISIBLE);
-
-            //HIDE
-            layout_joystick.setVisibility(View.VISIBLE);
-            lineFollowingButton.setVisibility(View.VISIBLE);
-            currentSpeed.setVisibility(View.VISIBLE);
-            currentDistance.setVisibility(View.VISIBLE);
-
-
-        }
     }
 }

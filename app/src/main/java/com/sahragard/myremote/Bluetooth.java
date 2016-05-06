@@ -40,6 +40,7 @@ public class Bluetooth {
     private String distance;
     private boolean isConnected = false;
     private Spinner deviceSpinner;
+    private boolean addTextViews = true;
     //NEW
 
     /*
@@ -63,13 +64,18 @@ public class Bluetooth {
         });
 
         //Input thread
-        currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
-        currentDistance = (TextView) activity.findViewById(R.id.currentDistance);
         inputThread = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
                     while (input != null) {
                         try {
+                            if (isConnected() == true) {
+                                if(addTextViews == true) {
+                                    addTextViews = false;
+                                    currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
+                                    currentDistance = (TextView) activity.findViewById(R.id.currentDistance);
+                                }
+                            }
                             System.out.println(input.readLine());
                             if (input.readLine().startsWith("s")) {
                                 speedString = input.readLine().substring(1);
@@ -79,9 +85,11 @@ public class Bluetooth {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                                    //currentSpeed.setText(distance + " m/s");
-                                    //currentDistance.setText(speedString + "m");
+                                    if (addTextViews == false) {
+                                        // This code will always run on the UI thread, therefore is safe to modify UI elements.
+                                        currentSpeed.setText(distance + " m/s");
+                                        currentDistance.setText(speedString + "m");
+                                    }
                                 }
                             });
                         } catch (IOException e) {
