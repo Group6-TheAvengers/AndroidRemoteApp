@@ -56,13 +56,11 @@ public class SmartCar {
         if (currentDirection == "isNotMoving" || currentDirection == "isForward") {
             currentDirection = "isForward";
 
-            bt.send("a");
             bt.send("l");
         }
         if (currentDirection == "isBackward") {
             currentDirection = "isBackward";
 
-            bt.send("d");
             bt.send("l");
         }
     }
@@ -71,13 +69,11 @@ public class SmartCar {
         if (currentDirection == "isForward") {
             currentDirection = "isForward";
 
-            bt.send("a");
             bt.send("i");
         }
         if (currentDirection == "isBackward") {
             currentDirection = "isBackward";
 
-            bt.send("d");
             bt.send("i");
         }
     }
