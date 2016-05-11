@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private JoyStickClass js;
     private Bluetooth bt;
     private Switch btSwitch;
-    // NEW
+    // NEW yolo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
