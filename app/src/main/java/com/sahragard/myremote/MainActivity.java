@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 
@@ -39,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setSwitch();
 
         //Start bluetooth and find devices
-        btSwitch.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
+        btSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!btAdapter.isEnabled()) {
                     bt.getDeviceList().clear();
                     btSwitch.setChecked(true);
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         //Connect to selected device
         connectDevice = (Button) findViewById(R.id.connectDevice);
