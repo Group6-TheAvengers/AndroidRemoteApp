@@ -87,8 +87,8 @@ public class Bluetooth {
                                 public void run() {
                                     if (addTextViews == false) {
                                         // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                                        currentSpeed.setText(distance + " m/s");
-                                        currentDistance.setText(speedString + "m");
+                                        //currentSpeed.setText(distance + " m/s");
+                                        //currentDistance.setText(speedString + "m");
                                     }
                                 }
                             });
@@ -199,6 +199,15 @@ public class Bluetooth {
                 isConnected = true;
             } catch (IOException e) {
             }
+        }
+    }
+
+    //Disconnect from connected device
+    public void disconnectDevice() {
+        try {
+            btSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -52,4 +52,13 @@
         android:layout_alignEnd="@+id/currentSpeed"
         android:layout_marginRight="25dp"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disconnect"
+        android:id="@+id/disconnectButton"
+        android:layout_alignBottom="@+id/layout_joystick"
+        android:layout_alignRight="@+id/currentDistance"
+        android:layout_alignEnd="@+id/currentDistance"/>
+
 </RelativeLayout>

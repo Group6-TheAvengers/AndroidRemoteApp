@@ -75,7 +75,7 @@
             android:clickable="true"
             android:contextClickable="false"
             android:dropDownSelector="#ffffff"
-            android:popupBackground="#ffffff"
+            android:popupBackground="#000000"
             android:textAlignment="center"
             android:visibility="visible"
             android:background="#67930606"

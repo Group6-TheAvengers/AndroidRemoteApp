@@ -8,12 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-    private Button connectDevice,lineFollowingButton;
+    private Button connectDevice,lineFollowingButton, disconnectButton;
     private boolean linefollowing = false;
     private RelativeLayout layout_joystick;
     private JoyStickClass js;
@@ -24,26 +22,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Loads interface of connect screen
+        loadConnect();
+    }
+
+    // Interface of connect screen
+    public void loadConnect() {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         bt = new Bluetooth(MainActivity.this, btAdapter, MainActivity.this);
         btSwitch = (Switch) findViewById(R.id.btSwitch);
 
-        //Displays bluetooth status in the top
-        if (btAdapter.isEnabled()) {
-            btSwitch.setChecked(true);
-            btAdapter.startDiscovery();
-            bt.findDevices();
-
-        } else {
-            btSwitch.setChecked(false);
-        }
+        // Sets the status of the switch
+        setSwitch();
 
         //Start bluetooth and find devices
         btSwitch.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 if (!btAdapter.isEnabled()) {
+                    bt.getDeviceList().clear();
                     btSwitch.setChecked(true);
                     bt.enableBT();
 
@@ -71,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
                     if (device != null) {
                         if (device.getName().equals(bt.selectedDeviceName)) {
                             bt.connect(device);
-                            setContentView(R.layout.dashboard);
-                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            loadInterface();
+
+                            // Load control interface
+                            loadControls();
                         }
                     }
                 }
@@ -81,12 +80,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void loadInterface() {
+    // Load control interface
+    public void loadControls() {
+        setContentView(R.layout.dashboard);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //Enable line following
         lineFollowingButton = (Button) findViewById(R.id.lineFollowingButton);
         lineFollowingButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                if(linefollowing == false) {
+                if (linefollowing == false) {
                     // Enables line following
                     bt.send("q");
                     linefollowing = true;
@@ -95,6 +97,16 @@ public class MainActivity extends AppCompatActivity {
                     bt.send("m");
                     linefollowing = false;
                 }
+            }
+        });
+
+        disconnectButton = (Button) findViewById(R.id.disconnectButton);
+        disconnectButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                // Disconnect from device to make it available again
+                // Then loads interface of connect screen
+                bt.disconnectDevice();
+                loadConnect();
             }
         });
 
@@ -118,5 +130,19 @@ public class MainActivity extends AppCompatActivity {
         //Draw inner Joystick
         js.drawStick();
 
+    }
+
+    // Set the switch to on or off
+    public void setSwitch() {
+        if (btAdapter.isEnabled()) {
+            btSwitch.setChecked(true);
+            // Clear the device list from previous items
+            bt.getDeviceList().clear();
+            btAdapter.startDiscovery();
+            bt.findDevices();
+
+        } else if(!btAdapter.isEnabled()) {
+            btSwitch.setChecked(false);
+        }
     }
 }
