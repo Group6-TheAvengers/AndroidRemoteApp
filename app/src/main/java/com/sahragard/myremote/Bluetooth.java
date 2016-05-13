@@ -35,12 +35,12 @@ public class Bluetooth {
     private Activity activity;
     private BluetoothSocket btSocket;
     public String selectedDeviceName = "";
-    private String speedString;
+    private String speedString="";
     private TextView currentSpeed, currentDistance;
-    private String distance;
+    private String distance="";
     private boolean isConnected = false;
     private Spinner deviceSpinner;
-    private boolean addTextViews = true;
+    private boolean addTextViews;
     //NEW
 
     /*
@@ -63,38 +63,49 @@ public class Bluetooth {
             }
         });
 
+
         //Input thread
         inputThread = new Thread(new Runnable() {
             public void run() {
+                String str="";
                 while (!Thread.currentThread().isInterrupted()) {
-                    while (input != null) {
-                        try {
-                            if (isConnected() == true) {
-                                if(addTextViews == true) {
-                                    currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
-                                    currentDistance = (TextView) activity.findViewById(R.id.currentDistance);
-                                    addTextViews = false;
+                    try {
+                        while ((str = input.readLine()) != null) {
+                            try {
+                                /* ENABLE BELOW PRINT STATEMENTS FOR ERROR CHECKING WHEN NULL POINTER EXCEPTION IS RECEIVED
+                                FOR TEXTVIEWS */
+
+                                //System.out.println("The device is connected: " + isConnected());
+                                if (isConnected()) {
+                                    //System.out.println("Trying to add textviews");
+                                        currentSpeed = (TextView) activity.findViewById(R.id.currentSpeed);
+                                        currentDistance = (TextView) activity.findViewById(R.id.currentDistance);
+                                        addTextViews = false;
+                                        //System.out.println("The textviews ARE ADDED");
                                 }
-                            }
-                            System.out.println(input.readLine());
-                            if (input.readLine().startsWith("s")) {
-                                speedString = input.readLine().substring(1);
-                            } else {
-                                distance = input.readLine().substring(1);
-                            }
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (addTextViews == false) {
-                                        // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                                        //currentSpeed.setText(distance + " m/s");
-                                        //currentDistance.setText(speedString + "m");
+                                if (str.equals("s")) {
+                                    speedString = input.readLine();
+                                } else if (str.equals("d")) {
+                                    distance = input.readLine();
+                                }
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!addTextViews) {
+                                            // This code will always run on the UI thread, therefore is safe to modify UI elements.
+                                            currentSpeed.setText(speedString + " m/s");
+                                            currentDistance.setText(distance + " m");
+                                        }
+
+
                                     }
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+                    }catch (IOException e){
+
                     }
                 }
             }
